@@ -1,24 +1,31 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // Mengambil semua elemen dropdown
-  const dropdowns = document.querySelectorAll(".dropdown");
+  // Get all dropdown buttons
+  const dropdownButtons = document.querySelectorAll(".dropdown button");
 
-  dropdowns.forEach((dropdown) => {
-    // Menambahkan event listener pada setiap tombol dropdown
-    dropdown.addEventListener("click", function () {
-      // Mengambil elemen menu dropdown terkait
-      const menu = this.querySelector(".dropdown-menu");
+  // Add click event listener to each dropdown button
+  dropdownButtons.forEach((button) => {
+    button.addEventListener("click", function () {
+      // Get the associated dropdown menu
+      const dropdownMenu = this.nextElementSibling;
 
-      // Toggle class 'hidden' untuk menampilkan atau menyembunyikan menu
-      menu.classList.toggle("hidden");
+      // Toggle visibility of the dropdown menu
+      dropdownMenu.classList.toggle("hidden");
+
+      // Close other dropdowns
+      dropdownButtons.forEach((otherButton) => {
+        if (otherButton !== this) {
+          const otherDropdownMenu = otherButton.nextElementSibling;
+          otherDropdownMenu.classList.add("hidden");
+        }
+      });
     });
+  });
 
-    // Menambahkan event listener pada document untuk menutup dropdown jika klik di luar
-    document.addEventListener("click", function (event) {
-      if (!dropdown.contains(event.target)) {
-        // Menyembunyikan menu jika klik di luar dropdown
-        const menu = dropdown.querySelector(".dropdown-menu");
-        menu.classList.add("hidden");
-      }
-    });
+  // Close dropdown menu when clicking outside
+  document.addEventListener("click", function (event) {
+    if (!event.target.closest(".dropdown")) {
+      const dropdownMenus = document.querySelectorAll(".dropdown-menu");
+      dropdownMenus.forEach((menu) => menu.classList.add("hidden"));
+    }
   });
 });
